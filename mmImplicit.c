@@ -369,7 +369,7 @@ static void *next_fit(size_t asize)
    //If you don't find a large enough block in the second loop then
    //return NULL.
    //
-   //Don't modify current.  It is modified by mm_malloc.
+   //Don't modify current here.  It is modified by mm_malloc.
 }
 
 /*
@@ -380,7 +380,7 @@ static void *next_fit(size_t asize)
 static void *best_fit(size_t asize)
 {
 /******* Work to be done here *******/
-   //Replace this statement by an implementation of the next_fit
+   //Replace this statement by an implementation of the best_fit
    //algorithm. 
    return first_fit(asize);
 
