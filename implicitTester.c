@@ -25,17 +25,22 @@ int main(int argc, char * argv[])
    void *bp1, *bp2, *bp3, *bp4;
 
    parseArgs(argc, argv);
-   //don't delete this calls. You need these.
+   //don't delete these calls. You need these.
    mem_init();
    mm_init();
+   
+   //this is what the heap looks like before any mallocs
+   printBlocks();
 
    //You can modify this however you like.  You want to come
    //up with an example of mallocs and frees so that the mallocs
-   //will return determine different blocks depending upon
+   //will return different blocks depending upon
    //the placement strategy.
    //Your first set of mallocs should use almost the entire heap
-   //(and no more). You want to cause the next fit pointer to
-   //loop back around to the beginning of the heap.
+   //(and no more). 
+   //After you do a bunch of mallocs, free half of those blocks
+   //so you'll have a free block between every two allocated blocks.
+   //That's your setup.
    printf("Blocks after malloc(0x128), malloc(0x118), malloc(0x178)\n");
    bp1 = mm_malloc(0x128);
    bp2 = mm_malloc(0x118);
@@ -47,12 +52,23 @@ int main(int argc, char * argv[])
           (unsigned int) bp1, (unsigned int) bp3);
    printBlocks();
 
+   //After the setup, you should make two more calls to malloc.
+   //That call will return a different value depending upon which
+   //fitting strategy is used. Next fit should cause malloc to
+   //return the free block at the end.
    printf("Blocks after malloc(0x38)\n");
    bp4 = mm_malloc(0x38);
    printBlocks();
    //firstfit will pick the very first free block that is big enough.
    //The one pointed to by bp1 is big enough.
+   //Add tests like this to your code to check for correctness of
+   //your placement strategy.  You'll have to figure out what
+   //the first parameter is "by hand" ... studying the heap and
+   //understanding how the placement strategy works
    if (whichfit == FIRSTFIT) addressCompare(bp1, bp4);
+
+   //Now do one more call.  For this one, your setup should cause
+   //nextfit to loop around to find a block.
 
    return 0;
 }
