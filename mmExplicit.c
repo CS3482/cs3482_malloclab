@@ -3,8 +3,8 @@
  *                implemented using explicit lists.  Your job is to implement
  *                the following functions:
  *                removeBlock
- *                coalesce
  *                insertInFront
+ *                coalesce
  *
  *                For extra credit:
  *                next fit
@@ -372,12 +372,13 @@ static void *coalesce(void *bp)
  */
 static void *first_fit(size_t asize)
 {
-   char *bp; 
+   char *bp;
+   //firstFree points to the first block in the free list
+   //the successor word in the block points to the next block 
    for (bp = firstFree; bp != 0; bp = (char *) GET(SUCC(bp)))
    {
       if (asize <= GET_SIZE(HDRP(bp)))
       {
-         //printf("payload address: %x, size: %x\n", (unsigned int) bp, GET_SIZE(HDRP(bp)));
          return bp;
       }
    }
@@ -468,7 +469,8 @@ static void removeBlock(void * bp)
 /******* Work to be done here *******/
 
    //Remove a block by changing the pointers in the previous
-   //block and the next block (if present).
+   //block and the next block (if present) so that they point to each
+   //other.  Be careful about edge cases.
    //
    //You may also need to change firstFree and/or lastFree.
 }

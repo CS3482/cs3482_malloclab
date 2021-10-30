@@ -59,7 +59,7 @@
 //create a header or footer by ORing the size and allocation bit
 #define PACK(size, alloc) ((size) | (alloc))
 
-//get the word stored in address p
+//get the word (i.e., unsigned int) stored in address p
 #define GET(p) (*(unsigned int *)(p))
 //store a word in memory at address p
 #define PUT(p, val) (*(unsigned int *)(p) = (val))
@@ -72,15 +72,16 @@
 #define GET_ALLOC(p) (GET(p) & 0x1)
 
 //bp is the address of the payload
-//HDRP returns the address of the header
+//HDRP returns the address of the header, which starts four bytes before payload
 #define HDRP(bp) ((char *)(bp) - WSIZE)
-//FTRP returns the address of the footer
+//FTRP returns the address of the footer; uses size in header to calc address
 #define FTRP(bp) ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE)
 
 //bp is the pointer to the payload
 //NEXT_BLKP returns a pointer to the payload of the next block
 #define NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))
 //PREV_BLKP returns a pointer to the payload of the previous block
+//accesses the footer in the previous block to get the size of that block
 #define PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))
 
 //Memory Pointers
@@ -329,6 +330,9 @@ static void *coalesce(void *bp)
 static void *first_fit(size_t asize)
 {
    void *bp; 
+   //start at the beginning of heap
+   //use size in the header to calculate the address of the next block
+   //when size is 0 then the epilogue block has been reached
    for(bp = heap_listp; GET_SIZE(HDRP(bp)) > 0; bp = NEXT_BLKP(bp))
    {
       if(!GET_ALLOC(HDRP(bp)) && (asize <= GET_SIZE(HDRP(bp))))
@@ -364,7 +368,8 @@ static void *next_fit(size_t asize)
    //
    //If you don't find a large enough block in the first loop, then
    //control should enter your second loop that will start at the 
-   //beginning of the heap.
+   //beginning of the heap.  Don't loop all the way to the end; just 
+   //go to current in the second loop.
    //
    //If you don't find a large enough block in the second loop then
    //return NULL.

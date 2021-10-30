@@ -41,34 +41,57 @@ int main(int argc, char * argv[])
    //After you do a bunch of mallocs, free half of those blocks
    //so you'll have a free block between every two allocated blocks.
    //That's your setup.
+   //
+   //This is a really simple example. You need to modify it to use
+   //most of the heap (with one hole at the end for next fit.)
+   //I.e., create more blocks with various sizes.
    printf("Blocks after malloc(0x128), malloc(0x118), malloc(0x178)\n");
    bp1 = mm_malloc(0x128);
    bp2 = mm_malloc(0x118);
    bp3 = mm_malloc(0x178);
    printBlocks();
-   mm_free(bp1);
-   mm_free(bp3);
-   printf("Blocks after free(0x%x), free(0x%x)\n",
-          (unsigned int) bp1, (unsigned int) bp3);
+
+   //Now free one block so there is a free block between two allocated
+   //blocks.
+   mm_free(bp2);
+   printf("Blocks after free(0x%x)\n", (unsigned int) bp2);
    printBlocks();
 
-   //After the setup, you should make two more calls to malloc.
-   //That call will return a different value depending upon which
-   //fitting strategy is used. Next fit should cause malloc to
-   //return the free block at the end.
-   printf("Blocks after malloc(0x38)\n");
+   //Now allocate a block
    bp4 = mm_malloc(0x38);
+   printf("Blocks after malloc(0x38)\n");
    printBlocks();
-   //firstfit will pick the very first free block that is big enough.
-   //The one pointed to by bp1 is big enough.
-   //Add tests like this to your code to check for correctness of
-   //your placement strategy.  You'll have to figure out what
-   //the first parameter is "by hand" ... studying the heap and
-   //understanding how the placement strategy works
-   if (whichfit == FIRSTFIT) addressCompare(bp1, bp4);
 
-   //Now do one more call.  For this one, your setup should cause
-   //nextfit to loop around to find a block.
+   //firstfit will pick the very first free block that is big enough.
+   //The one pointed to by bp2 is big enough.
+   //The first parameter to addressCompare contains the address it should be.
+   //The second parameter is the address returned by mm_malloc.
+   if (whichfit == FIRSTFIT) addressCompare(bp2, bp4);
+
+   //nextfit will pick the hole after the block pointed to
+   //by bp3.  The size of that block is 0x178 + 8 = 0x180
+   //This one won't work until you get next fit working.
+   if (whichfit == NEXTFIT)  addressCompare(bp3 + 0x180, bp4);
+
+   //You'll also need to test best fit
+   //if (whichfit == BESTFIT) addressCompare(..., bp4);
+   //
+   //Now add one more malloc.  This malloc should cause next fit to loop
+   //around.  That is, the hole at the bottom won't be big enough.
+   //First fit and best fit should also return different values, so
+   //don't make all of the holes the same size.
+   //
+   //Allocate the final block (bpX will be something like bp11,
+   //depending upon how many blocks you allocate).
+   //bpX = mm_malloc(....);
+   //printf("Blocks after malloc(...)\n");
+   //printBlocks();
+   //
+   //Remember the block that is allocated has to be different
+   //for each of the three policies.
+   //if (whichfit == FIRSTFIT) addressCompare(..., bpX);
+   //if (whichfit == NEXTFIT)  addressCompare(..., bpX);
+   //if (whichfit == BESTFIT) addressCompare(..., bpX);
 
    return 0;
 }
