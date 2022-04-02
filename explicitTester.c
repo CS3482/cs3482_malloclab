@@ -40,6 +40,10 @@ int main(int argc, char * argv[])
    printf("Blocks after mm_malloc(0x7f8):\n");
    printBlocks();
    printFreeList();
+   mm_free(bp1);
+   mm_free(bp2);
+   printBlocks();
+   printFreeList();   //bp1 and bp2 blocks should be coalesced
    return 0;
 }
 

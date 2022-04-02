@@ -304,8 +304,7 @@ void *mm_realloc(void *ptr, size_t size)
 static void insertInFront(void * bp)
 {
 
-/******* Work to be done here *******/
-
+//TODO 
    //Insert the block pointed to by bp in the front of
    //the explicit list.
    //
@@ -349,8 +348,8 @@ static void *extend_heap(size_t words)
 static void *coalesce(void *bp)
 {
 
-/******* Work to be done here *******/
 
+//TODO 
    //Use the slides to help you figure out how to implement this.
    //Also take a look at the implicit list code.
    //removeBlock function is very helpful here.
@@ -395,6 +394,7 @@ static void *first_fit(size_t asize)
  */
 static void *next_fit(size_t asize)
 {
+//TODO 
 /******** You can implement this for extra credit if you like. ********/   
    return first_fit(asize);
 }
@@ -407,6 +407,7 @@ static void *next_fit(size_t asize)
  */
 static void *best_fit(size_t asize)
 {
+//TODO 
 /******** You can implement this for extra credit if you like. ********/   
    return first_fit(asize);
 }
@@ -465,9 +466,7 @@ static void place(void *bp, size_t asize)
  */
 static void removeBlock(void * bp)
 {
-
-/******* Work to be done here *******/
-
+//TODO 
    //Remove a block by changing the pointers in the previous
    //block and the next block (if present) so that they point to each
    //other.  Be careful about edge cases.

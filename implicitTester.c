@@ -44,7 +44,9 @@ int main(int argc, char * argv[])
    //
    //This is a really simple example. You need to modify it to use
    //most of the heap (with one hole at the end for next fit.)
-   //I.e., create more blocks with various sizes.
+   //i.e., create more blocks with various sizes.
+   //Note: you can give yourself easier addresses to work with by always
+   //      passing to malloc a size in hex that ends with 8.  
    printf("Blocks after malloc(0x128), malloc(0x118), malloc(0x178)\n");
    bp1 = mm_malloc(0x128);
    bp2 = mm_malloc(0x118);

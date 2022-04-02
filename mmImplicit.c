@@ -85,8 +85,8 @@
 #define PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))
 
 //Memory Pointers
-//Points to the beginning of the heap (payload of prologue block)
-static char* heap_listp;  
+//Points to the beginning of the heap (payload/footer of prologue block)
+static char * heap_listp;  
 //Points to the block after the last allocated block; used for next fit
 static char* current;     
 
@@ -308,13 +308,14 @@ static void *coalesce(void *bp)
       bp = PREV_BLKP(bp);
    }
 
-/******* Work to be done here *******/
+//TODO 
    //A problem that can occur with the next fit policy
    //is that after coalescing the current pointer points to
    //the middle of the block pointed to by bp.
    //Add code that looks for that.  If current points
    //to the middle of the block then set it to be
-   //equal to bp.
+   //equal to bp. (Don't just always set it to be. That is
+   //incorrect.)
    //Note: current is a global variable
 
    return bp;
@@ -357,7 +358,7 @@ static void *first_fit(size_t asize)
 static void *next_fit(size_t asize)
 {
 
-/******* Work to be done here *******/
+//TODO 
    //Replace this statement by an implementation of the next_fit
    //algorithm. 
    return first_fit(asize);
@@ -384,7 +385,8 @@ static void *next_fit(size_t asize)
  */
 static void *best_fit(size_t asize)
 {
-/******* Work to be done here *******/
+
+//TODO 
    //Replace this statement by an implementation of the best_fit
    //algorithm. 
    return first_fit(asize);
