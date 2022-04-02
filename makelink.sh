@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-ln -s /u/css/classes/3482/211/lab7/traces traces
+ln -s /u/classes/3482/221/malloclab/traces traces
